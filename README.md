@@ -1,3 +1,7 @@
 # SDSView
 
-A description of this package.
+Wrapped NSView
+
+## ScrollCollectionView
+wrapped NSCollectionView in NSScrollView
+
