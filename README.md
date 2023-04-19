@@ -10,3 +10,9 @@ wrapped NSOutlineView in NSScrollView
 
 ## ScrollTableView
 wrapped NSTableView in NSScrollView
+
+
+## convenient functions
+
+### savePanelForFileName (only for macOS)
+### openPanelForFileName (only for macOS)
