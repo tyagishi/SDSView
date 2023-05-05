@@ -1,6 +1,9 @@
 # SDSView
 
-Wrapped NSView
+Wrapped NSView/UIView
+
+## ScrollTextView
+wrapped NSTextView in NSScrollView / UITextView (already inherit UIScrollView)
 
 ## ScrollCollectionView
 wrapped NSCollectionView in NSScrollView
