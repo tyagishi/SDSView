@@ -25,6 +25,8 @@ public func savePanelForFilename(_ fileName: String? = nil) async -> URL? {
     if result == .OK {
         return panel.url
     }
+    #elseif os(iOS)
+    fatalError("not implemented")
     #endif
     return nil
 }
@@ -43,6 +45,8 @@ public func openPanelForFilename(_ folder: URL? = nil) async -> [URL] {
     if result == .OK {
         return panel.urls
     }
+#elseif os(iOS)
+    fatalError("not implemented")
 #endif
     return []
 }

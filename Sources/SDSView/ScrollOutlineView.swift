@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+#if os(macOS)
 public typealias ScrollOutlineViewSetup = (NSOutlineView, NSScrollView) -> Void
 public typealias ScrollOutlineViewUpdate = (NSOutlineView, NSScrollView) -> Void
 
@@ -37,4 +38,4 @@ public struct ScrollOutlineView: NSViewRepresentable {
 
     public typealias NSViewType = NSScrollView
 }
-
+#endif

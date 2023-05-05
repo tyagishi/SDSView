@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+#if os(macOS)
 public typealias ScrollTableViewSetup = (NSTableView, NSScrollView) -> Void
 public typealias ScrollTableViewUpdate = (NSTableView, NSScrollView) -> Void
 
@@ -52,3 +53,4 @@ final public class SpaceCapableTableView: NSTableView {
         return super.performKeyEquivalent(with: event)
     }
 }
+#endif
