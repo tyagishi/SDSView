@@ -4,6 +4,7 @@ Wrapped NSView/UIView
 
 ## ScrollTextView
 wrapped NSTextView in NSScrollView / UITextView (already inherit UIScrollView)
+note: not used on iOS yet.
 
 ## ScrollCollectionView
 wrapped NSCollectionView in NSScrollView
