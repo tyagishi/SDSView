@@ -15,6 +15,9 @@ wrapped NSOutlineView in NSScrollView
 ## ScrollTableView
 wrapped NSTableView in NSScrollView
 
+## WebView
+wrapped WKWebView (already in NSScrollView/UISScrollView)
+note: not implemented for iOS yet
 
 ## convenient functions
 
