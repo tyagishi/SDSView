@@ -21,18 +21,19 @@ public typealias WebViewUpdate = (WKWebView) -> Void
 public struct WebView: NSViewRepresentable {
     public typealias NSViewType = WKWebView
 
+    let wkWebView: WKWebView
     let webviewSetup: WebViewSetup
     let webviewUpdate: WebViewUpdate
 
-    public init(webviewSetup: @escaping WebViewSetup, webviewUpdate: @escaping WebViewUpdate) {
+    public init(wkWebView: WKWebView? = nil,
+                webviewSetup: @escaping WebViewSetup, webviewUpdate: @escaping WebViewUpdate) {
         self.webviewSetup = webviewSetup
         self.webviewUpdate = webviewUpdate
+        self.wkWebView = wkWebView ?? WKWebView()
     }
 
     public func makeNSView(context: Context) -> WKWebView {
-        let wkWebView = WKWebView()
-
-        webviewSetup(wkWebView)
+        webviewSetup(self.wkWebView)
         return wkWebView
     }
     
