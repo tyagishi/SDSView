@@ -20,6 +20,23 @@ public typealias ScrollTextViewFactory = @MainActor () -> (NSUITextView, NSUIScr
 public typealias ScrollTextViewUpdate = @MainActor (NSUITextView, NSUIScrollView) -> Void
 
 #if os(macOS)
+import AppKit
+public typealias NSUITextView = NSTextView
+public typealias EditActions = NSTextStorageEditActions
+public typealias NSUIEditActions = NSTextStorageEditActions
+protocol NSUITextViewDelegate: NSTextViewDelegate {
+    func nsuiTextDidChange(_ textView: NSUITextView)
+}
+#elseif os(iOS)
+import UIKit
+public typealias NSUITextView = UITextView
+public typealias EditActions = NSTextStorage.EditActions
+public typealias NSUIEditActions = NSTextStorage.EditActions
+protocol NSUITextViewDelegate: UITextViewDelegate {
+    func nsuiTextDidChange(_ textView: NSUITextView)
+}
+#endif
+#if os(macOS)
 public struct ScrollTextView: NSViewRepresentable {
     let textViewFactory: ScrollTextViewFactory
     //let textViewSetup: ScrollTextViewSetup
