@@ -24,7 +24,7 @@ import AppKit
 public typealias NSUITextView = NSTextView
 public typealias EditActions = NSTextStorageEditActions
 public typealias NSUIEditActions = NSTextStorageEditActions
-protocol NSUITextViewDelegate: NSTextViewDelegate {
+public protocol NSUITextViewDelegate: NSTextViewDelegate {
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
 #elseif os(iOS)
@@ -32,7 +32,7 @@ import UIKit
 public typealias NSUITextView = UITextView
 public typealias EditActions = NSTextStorage.EditActions
 public typealias NSUIEditActions = NSTextStorage.EditActions
-protocol NSUITextViewDelegate: UITextViewDelegate {
+public protocol NSUITextViewDelegate: UITextViewDelegate {
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
 #endif
