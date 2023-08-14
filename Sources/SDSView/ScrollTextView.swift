@@ -24,9 +24,6 @@ import AppKit
 
 public typealias NSUITextView = NSTextView
 public typealias NSUIEditActions = NSTextStorageEditActions
-public protocol NSUITextViewDelegate: NSTextViewDelegate {
-    func nsuiTextDidChange(_ textView: NSUITextView)
-}
 
 @available(*, deprecated, renamed: "NSUIEditActions", message: "use NSUIEditActions")
 public typealias EditActions = NSTextStorageEditActions
@@ -36,9 +33,6 @@ import UIKit
 
 public typealias NSUITextView = UITextView
 public typealias NSUIEditActions = NSTextStorage.EditActions
-public protocol NSUITextViewDelegate: UITextViewDelegate {
-    func nsuiTextDidChange(_ textView: NSUITextView)
-}
 
 @available(*, deprecated, renamed: "NSUIEditActions", message: "use NSUIEditActions")
 public typealias EditActions = NSTextStorage.EditActions
