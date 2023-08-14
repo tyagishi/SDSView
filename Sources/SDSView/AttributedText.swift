@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+#if os(macOS)
 public struct AttributedText: NSViewRepresentable {
     let attributedString: NSAttributedString
 
@@ -30,3 +31,4 @@ public struct AttributedText: NSViewRepresentable {
 
     public typealias NSViewType = NSTextField
 }
+#endif

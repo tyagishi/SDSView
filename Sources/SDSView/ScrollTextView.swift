@@ -21,20 +21,27 @@ public typealias ScrollTextViewUpdate = @MainActor (NSUITextView, NSUIScrollView
 
 #if os(macOS)
 import AppKit
+
 public typealias NSUITextView = NSTextView
-public typealias EditActions = NSTextStorageEditActions
 public typealias NSUIEditActions = NSTextStorageEditActions
 public protocol NSUITextViewDelegate: NSTextViewDelegate {
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
+
+@available(*, deprecated, renamed: "NSUIEditActions", message: "use NSUIEditActions")
+public typealias EditActions = NSTextStorageEditActions
+
 #elseif os(iOS)
 import UIKit
+
 public typealias NSUITextView = UITextView
-public typealias EditActions = NSTextStorage.EditActions
 public typealias NSUIEditActions = NSTextStorage.EditActions
 public protocol NSUITextViewDelegate: UITextViewDelegate {
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
+
+@available(*, deprecated, renamed: "NSUIEditActions", message: "use NSUIEditActions")
+public typealias EditActions = NSTextStorage.EditActions
 #endif
 #if os(macOS)
 public struct ScrollTextView: NSViewRepresentable {
