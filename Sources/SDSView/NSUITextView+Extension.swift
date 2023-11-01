@@ -94,12 +94,21 @@ extension NSUITextView {
             #endif
         }
     }
-
-    public func nsuiInsertText(_ text: String, replacementRange range: NSRange) {
+    
+    /// insert text at specified position
+    /// - Parameters:
+    ///   - text: text to insert
+    ///   - range: position/range for text, iff == nil, insert at current cursor position
+    ///   note: NSText.insertText is deprecated mcOS 10.11
+    public func nsuiInsertText(_ text: String, replacementRange range: NSRange? = nil) {
         #if os(macOS)
+        let range = range ?? self.selectedRange()
         self.insertText(text, replacementRange: range)
         #elseif os(iOS)
-        fatalError("not implemented")
+        if let range = range {
+            self.nsuiSelectedRange = range
+        }
+        self.insertText(text)
         #endif
     }
 }
