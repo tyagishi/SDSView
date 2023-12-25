@@ -63,12 +63,9 @@ extension NSUITextView {
     }
     #endif
 
-    public var nsuiSelectedLocation: Int? {
+    public var nsuiSelectedLocation: Int {
         #if os(macOS)
-        if let selectedRange = self.selectedRanges.first?.rangeValue {
-            return (selectedRange as NSRange).location
-        }
-        return nil
+        return self.selectedRange().location
         #elseif os(iOS)
         return self.selectedRange.location
         #endif
