@@ -36,6 +36,12 @@ extension NSUITextView {
         #endif
     }
 
+    #if os(macOS)
+    var text: String {
+        self.string
+    }
+    #endif
+
     #if os(iOS)
     public var string: String {
         get {
@@ -106,6 +112,14 @@ extension NSUITextView {
             self.nsuiSelectedRange = range
         }
         self.insertText(text)
+        #endif
+    }
+    
+    func nsuiHasMarkedText() -> Bool {
+        #if os(macOS)
+        return hasMarkedText()
+        #else
+        return markedTextRange != nil
         #endif
     }
 }
