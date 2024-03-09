@@ -18,10 +18,12 @@ import UIKit
 
 #if os(macOS)
 public protocol NSUITextViewDelegate: NSTextViewDelegate {
+    @MainActor
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
 #else
 public protocol NSUITextViewDelegate: UITextViewDelegate {
+    @MainActor
     func nsuiTextDidChange(_ textView: NSUITextView)
 }
 #endif
