@@ -117,7 +117,7 @@ extension NSUITextView {
         #endif
     }
     
-    func nsuiHasMarkedText() -> Bool {
+    public func nsuiHasMarkedText() -> Bool {
         #if os(macOS)
         return hasMarkedText()
         #else
