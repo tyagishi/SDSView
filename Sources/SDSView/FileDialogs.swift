@@ -30,6 +30,24 @@ public func savePanelForFilename(_ fileName: String? = nil) async -> URL? {
     #endif
     return nil
 }
+@MainActor
+public func openPanelForFolder() async -> URL? {
+    #if os(macOS)
+    let panel = NSOpenPanel()
+    panel.canCreateDirectories = true
+    panel.canChooseDirectories = true
+    panel.showsTagField = true
+    panel.isExtensionHidden = true
+    panel.level = NSWindow.Level.modalPanel
+    let result = await panel.beginSheetModal(for: NSApp.mainWindow!)
+    if result == .OK {
+        return panel.url
+    }
+    #elseif os(iOS)
+    fatalError("not implemented")
+    #endif
+    return nil
+}
 
 @MainActor
 public func openPanelForFilename(_ folder: URL? = nil) async -> [URL] {
