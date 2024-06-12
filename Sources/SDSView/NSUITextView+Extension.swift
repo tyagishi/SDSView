@@ -124,4 +124,13 @@ extension NSUITextView {
         return markedTextRange != nil
         #endif
     }
+    
+    // setFrameSize (exist only on macOS)
+    public func setNSUIFrameSize(_ size: CGSize) {
+        #if os(macOS)
+        setFrameSize(size)
+        #else
+        self.contentSize = size
+        #endif
+    }
 }
