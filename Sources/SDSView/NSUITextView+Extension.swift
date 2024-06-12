@@ -53,22 +53,6 @@ extension NSUITextView {
             self.text = newValue
         }
     }
-    public var needsLayout: Bool {
-        get {
-            true
-        }
-        set(newValue) {
-            //
-        }
-    }
-    public var needsDisplay: Bool {
-        get {
-            true
-        }
-        set(newValue) {
-            //
-        }
-    }
     #endif
 
     public var nsuiSelectedLocation: Int {
