@@ -40,6 +40,7 @@ public typealias EditActions = NSTextStorage.EditActions
 #if os(macOS)
 public struct ScrollTextView: NSViewRepresentable {
     public typealias NSViewType = NSScrollView
+    public typealias Coordinator = TextKitTextViewDelegate
     @Binding var text: String
     let textViewFactory: ScrollTextViewFactory
     //let textViewSetup: ScrollTextViewSetup
@@ -55,9 +56,14 @@ public struct ScrollTextView: NSViewRepresentable {
         self.textViewUpdate = textViewUpdate
     }
     
+    public func makeCoordinator() -> TextKitTextViewDelegate {
+        return TextKitTextViewDelegate($text)
+    }
+
     @MainActor
     public func makeNSView(context: Context) -> NSViewType {
-        let (_, scrollView) = textViewFactory()
+        let (textView, scrollView) = textViewFactory()
+        textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)
         return scrollView
     }
@@ -65,12 +71,14 @@ public struct ScrollTextView: NSViewRepresentable {
     @MainActor
     public func updateNSView(_ scrollView: NSViewType, context: Context) {
         guard let textView = scrollView.documentView as? NSUITextView else { return }
+        textView.delegate = context.coordinator
         textViewUpdate(textView, scrollView, text)
     }
 }
 #elseif os(iOS)
 public struct ScrollTextView: UIViewRepresentable {
     public typealias UIViewType = UITextView
+    public typealias Coordinator = TextKitTextViewDelegate
     @Binding var text: String
 
     let textViewFactory: ScrollTextViewFactory
@@ -87,17 +95,28 @@ public struct ScrollTextView: UIViewRepresentable {
         self.textViewUpdate = textViewUpdate
     }
 
+    public func makeCoordinator() -> TextKitTextViewDelegate {
+        return TextKitTextViewDelegate($text)
+    }
+
     @MainActor
     public func makeUIView(context: Context) -> UIViewType {
         let (textView, _) = textViewFactory()
+        textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)
         return textView
     }
 
     @MainActor
     public func updateUIView(_ textView: UIViewType, context: Context) {
+        textView.delegate = context.coordinator
         textViewUpdate(textView, textView, text)
     }
-
 }
 #endif
+
+//public class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
+//    public func nsuiTextDidChange(_ textView: NSUITextView) {
+//        print("Hello")
+//    }
+//}

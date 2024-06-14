@@ -1,18 +1,38 @@
 //
-//  File.swift
+//  TextKitViewDelegate.swift
 //
 //  Created by : Tomoaki Yagishita on 2024/06/15
 //  © 2024  SmallDeskSoftware
 //
 
-import Foundation
-public final class TextKitViewDelegate: NSObject, NSUITextViewDelegate {
-    public func nsuiTextDidChange(_ textView: SDSView.NSUITextView) {
-        _textChanged.send(textView.string)
+import SwiftUI
+import SDSNSUIBridge
+#if os(macOS)
+import AppKit
+#elseif os(iOS)
+import UIKit
+#endif
+
+public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
+    @Binding var text: String
+    var textViewDelegate: NSUITextViewDelegate? = nil
+    
+    public init(_ text: Binding<String>) {
+        self._text = text
+    }
+    
+    public func nsuiTextDidChange(_ textView: NSUITextView) {
+        text = textView.string
         #if os(iOS)
-        self.forceLayout() // workaround for bug in TextKit2(layout will not be called in some cases...)
+        forceLayout(textView)
         #endif
     }
+    
+    public func forceLayout(_ textView: NSUITextView) {
+        guard let textLayoutManager = textView.textLayoutManager else { return }
+        textLayoutManager.textViewportLayoutController.layoutViewport()
+    }
+    
     #if os(macOS)
     // MARK: NSTextDelegate
     @MainActor public func textShouldBeginEditing(_ textObject: NSText) -> Bool  {
@@ -35,13 +55,13 @@ public final class TextKitViewDelegate: NSObject, NSUITextViewDelegate {
 
     @available(macOS 10.10, *)
     @MainActor public func textDidChange(_ notification: Notification) {
-        guard let textView = _textView else { return }
+        guard let textView = notification.object as? NSUITextView else { return }
         textViewDelegate?.textDidChange?(notification)
         nsuiTextDidChange(textView)
     }
+    
     // MARK: NSTextViewDelegate
     // note: add implementation one by one when it is necessary
-    
     @available(macOS 10.0, *)
     @MainActor public func undoManager(for view: NSTextView) -> UndoManager? { textViewDelegate?.undoManager?(for: view) }
 
