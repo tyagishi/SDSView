@@ -57,7 +57,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
 }
 
 extension TextKitViewModel {
-    public func textViewFactory() -> (NSUITextView, NSUIScrollView) {
+    public func textViewFactory() -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
         #if os(macOS)
         // MARK: NSScrollView
         let scrollView = NSUIScrollView()
@@ -91,7 +91,7 @@ extension TextKitViewModel {
         
         textView.addSubview(contentView)
 
-        return (textView, scrollView)
+        return (textView, scrollView, nil)
         #else // for iOS
         let textView = UITextView(usingTextLayoutManager: true)
         textView.textContainer.size = CGSize(width: 0, height: 0)
@@ -107,7 +107,7 @@ extension TextKitViewModel {
         
         textView.addSubview(contentView)
 
-        return (textView, textView)
+        return (textView, textView, nil)
         #endif
     }
     

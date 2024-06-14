@@ -15,7 +15,7 @@ import SwiftUI
 import SDSNSUIBridge
 
 // at iOS, NSUIScrollView will be ignored/ at macOS NSUITextView will be ignored
-public typealias ScrollTextViewFactory = @MainActor () -> (NSUITextView, NSUIScrollView)
+public typealias ScrollTextViewFactory = @MainActor () -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?)
 //public typealias ScrollTextViewSetup = @MainActor (NSUITextView, NSUIScrollView) -> Void
 public typealias ScrollTextViewUpdate = @MainActor (NSUITextView, NSUIScrollView, String) -> Void
 
@@ -62,7 +62,8 @@ public struct ScrollTextView: NSViewRepresentable {
 
     @MainActor
     public func makeNSView(context: Context) -> NSViewType {
-        let (textView, scrollView) = textViewFactory()
+        let (textView, scrollView, localDelegate) = textViewFactory()
+        context.coordinator.textViewDelegate = localDelegate
         textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)
         return scrollView
@@ -101,7 +102,8 @@ public struct ScrollTextView: UIViewRepresentable {
 
     @MainActor
     public func makeUIView(context: Context) -> UIViewType {
-        let (textView, _) = textViewFactory()
+        let (textView, _, localDelegate) = textViewFactory()
+        context.coordinator.textViewDelegate = localDelegate
         textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)
         return textView
