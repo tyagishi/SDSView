@@ -55,7 +55,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
 }
 
 extension TextKitViewModel {
-    public func textViewFactory() -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
+    public func textViewFactory(_ text: String) -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
         #if os(macOS)
         // MARK: NSScrollView
         let scrollView = NSUIScrollView()
@@ -66,6 +66,7 @@ extension TextKitViewModel {
         let textView = NSTextView(frame: .zero)
         textView.autoresizingMask = [.height, .width]
         textView.delegate = self
+        textView.string = text
         
         // care cursor
         if #available(macOS 14, *) {
@@ -91,6 +92,7 @@ extension TextKitViewModel {
         return (textView, scrollView, nil)
         #else // for iOS
         let textView = UITextView(usingTextLayoutManager: true)
+        textView.string = text
         textView.textContainer.size = CGSize(width: 0, height: 0)
         self._textView = textView
         textView.delegate = self
