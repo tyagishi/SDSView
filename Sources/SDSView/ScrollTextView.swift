@@ -63,6 +63,7 @@ public struct ScrollTextView: NSViewRepresentable {
     @MainActor
     public func makeNSView(context: Context) -> NSViewType {
         let (textView, scrollView, localDelegate) = textViewFactory()
+        textView.string = text
         context.coordinator.textViewDelegate = localDelegate
         textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)
@@ -103,6 +104,7 @@ public struct ScrollTextView: UIViewRepresentable {
     @MainActor
     public func makeUIView(context: Context) -> UIViewType {
         let (textView, _, localDelegate) = textViewFactory()
+        textView.string = text
         context.coordinator.textViewDelegate = localDelegate
         textView.delegate = context.coordinator
         //textViewSetup(textView, scrollView)

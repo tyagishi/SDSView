@@ -32,7 +32,6 @@ extension TextViewModelProtocol {
 }
 
 open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
-    let initialText: String
     public var _textView: NSUITextView? = nil
     public var _scrollView: NSUIScrollView? = nil
     
@@ -43,8 +42,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
     internal var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
 
-    public init(_ text: String, textViewDelegate: NSUITextViewDelegate? = nil) {
-        self.initialText = text
+    public init(textViewDelegate: NSUITextViewDelegate? = nil) {
         self.textViewDelegate = textViewDelegate
         self.fragmentViewMap = .weakToWeakObjects()
     }
@@ -87,7 +85,6 @@ extension TextKitViewModel {
         scrollView.documentView = textView
         self._textView = textView
         self._scrollView = scrollView
-        textView.string = initialText
         
         textView.addSubview(contentView)
 
@@ -98,7 +95,6 @@ extension TextKitViewModel {
         self._textView = textView
         textView.delegate = self
 
-        textView.string = initialText
         textView.textContainerInset = .init(top: 0, left: 0, bottom: 0, right: 0)
 
         textView.textLayoutManager?.textContentManager?.delegate = self
