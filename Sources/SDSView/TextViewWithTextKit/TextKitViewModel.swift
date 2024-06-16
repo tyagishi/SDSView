@@ -78,9 +78,10 @@ extension TextKitViewModel {
         textView.textContainer?.size = NSSize(width: 0, height: 0) // 0 means no-limitation
         // note: textView.textContiner.lineFragmentPadding has 5.0 as default
 
-        textView.textContentStorage?.delegate = self
-        textView.textLayoutManager?.delegate = self
-        textView.textLayoutManager?.textViewportLayoutController.delegate = self
+        // set delegate
+        if self is NSTextContentManagerDelegate { textView.textContentStorage?.delegate = self }
+        if self is NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = self }
+        if self is NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = self }
 
         // MARK: build-up
         scrollView.documentView = textView
@@ -99,10 +100,10 @@ extension TextKitViewModel {
 
         textView.textContainerInset = .init(top: 0, left: 0, bottom: 0, right: 0)
 
-        textView.textLayoutManager?.textContentManager?.delegate = self
-        textView.textLayoutManager?.delegate = self
-        textView.textLayoutManager?.textViewportLayoutController.delegate = self
-        
+        if self is NSTextContentManagerDelegate { textView.textContentStorage?.delegate = self }
+        if self is NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = self }
+        if self is NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = self }
+
         textView.addSubview(contentView)
 
         return (textView, textView, nil)
@@ -112,6 +113,7 @@ extension TextKitViewModel {
     public func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) -> Void {
         OSLog.log.debug(#function)
         guard let textView = _textView else { return }
+        //textView.string = text
         textView.needsLayout = true
         textView.needsDisplay = true
     }
