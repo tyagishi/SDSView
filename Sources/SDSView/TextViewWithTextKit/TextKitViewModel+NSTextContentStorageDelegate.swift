@@ -16,7 +16,7 @@ import OSLog
 
 extension OSLog {
     // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextContentStorageDelegate")
-    static fileprivate var log = Logger(.disabled)
+    fileprivate static var log = Logger(.disabled)
 }
 
 extension TextKitViewModel: NSTextContentStorageDelegate {

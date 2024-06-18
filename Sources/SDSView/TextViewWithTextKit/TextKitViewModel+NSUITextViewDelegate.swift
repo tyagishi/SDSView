@@ -17,7 +17,7 @@ import OSLog
 
 extension OSLog {
     // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSUITextViewDelegate")
-    static fileprivate var log = Logger(.disabled)
+    fileprivate static var log = Logger(.disabled)
 }
 
 extension TextKitViewModel: NSUITextViewDelegate {
@@ -29,26 +29,31 @@ extension TextKitViewModel: NSUITextViewDelegate {
     }
     #if os(macOS)
     // MARK: NSTextDelegate
-    @MainActor public func textShouldBeginEditing(_ textObject: NSText) -> Bool  {
+    @MainActor
+    public func textShouldBeginEditing(_ textObject: NSText) -> Bool {
         textViewDelegate?.textShouldBeginEditing?(textObject) ?? true // YES means do it
     }
 
-    @MainActor public func textShouldEndEditing(_ textObject: NSText) -> Bool  {
+    @MainActor
+    public func textShouldEndEditing(_ textObject: NSText) -> Bool {
         textViewDelegate?.textShouldEndEditing?(textObject) ?? true // YES means do it
     }
 
     @available(macOS 10.10, *)
-    @MainActor public func textDidBeginEditing(_ notification: Notification) {
+    @MainActor
+    public func textDidBeginEditing(_ notification: Notification) {
         textViewDelegate?.textDidBeginEditing?(notification)
     }
 
     @available(macOS 10.10, *)
-    @MainActor public func textDidEndEditing(_ notification: Notification) {
+    @MainActor
+    public func textDidEndEditing(_ notification: Notification) {
         textViewDelegate?.textDidEndEditing?(notification)
     }
 
     @available(macOS 10.10, *)
-    @MainActor public func textDidChange(_ notification: Notification) {
+    @MainActor
+    public func textDidChange(_ notification: Notification) {
         guard let textView = _textView else { return }
         textViewDelegate?.textDidChange?(notification)
         nsuiTextDidChange(textView)
@@ -56,18 +61,20 @@ extension TextKitViewModel: NSUITextViewDelegate {
     // MARK: NSTextViewDelegate
     // note: add implementation one by one when it is necessary
     
-    @available(macOS 10.0, *)
-    @MainActor public func undoManager(for view: NSTextView) -> UndoManager? { textViewDelegate?.undoManager?(for: view) }
+    @MainActor
+    public func undoManager(for view: NSTextView) -> UndoManager? { textViewDelegate?.undoManager?(for: view) }
 
-    @MainActor public func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+    @MainActor
+    public func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
         textViewDelegate?.textView?(textView, doCommandBy: commandSelector) ?? false
     }
 
-    @available(macOS 10.5, *)
-    @MainActor public func textView(_ view: NSTextView, menu: NSMenu, for event: NSEvent, at charIndex: Int) -> NSMenu? {
+    @MainActor
+    public func textView(_ view: NSTextView, menu: NSMenu, for event: NSEvent, at charIndex: Int) -> NSMenu? {
         textViewDelegate?.textView?(view, menu: menu, for: event, at: charIndex)
     }
 
+    // swiftlint:disable all
     // Delegate only.
     //@MainActor func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool { }
     
@@ -81,32 +88,25 @@ extension TextKitViewModel: NSUITextViewDelegate {
 //    @MainActor optional func textView(_ textView: NSTextView, doubleClickedOn cell: any NSTextAttachmentCellProtocol, in cellFrame: NSRect, at charIndex: Int)
 //
 //
-//    // Delegate only.  Allows the delegate to take over attachment dragging altogether.
+//    // Delegate only. Allows the delegate to take over attachment dragging altogether.
 //    @MainActor optional func textView(_ view: NSTextView, draggedCell cell: any NSTextAttachmentCellProtocol, in rect: NSRect, event: NSEvent, at charIndex: Int)
 //
 //
-//    // Delegate only.  If the previous method is not used, this method and the next allow the textview to take care of attachment dragging and pasting, with the delegate responsible only for writing the attachment to the pasteboard.  In this method, the delegate should return an array of types that it can write to the pasteboard for the given attachment.
 //    @MainActor optional func textView(_ view: NSTextView, writablePasteboardTypesFor cell: any NSTextAttachmentCellProtocol, at charIndex: Int) -> [NSPasteboard.PasteboardType]
 //
 //
-//    // Delegate only.  In this method, the delegate should attempt to write the given attachment to the pasteboard with the given type, and return success or failure.
 //    @MainActor optional func textView(_ view: NSTextView, write cell: any NSTextAttachmentCellProtocol, at charIndex: Int, to pboard: NSPasteboard, type: NSPasteboard.PasteboardType) -> Bool
 //
 //
-//    // Delegate only.  Will not be called if textView:willChangeSelectionFromCharacterRanges:toCharacterRanges: is implemented.  Effectively prevents multiple selection.
 //    @MainActor optional func textView(_ textView: NSTextView, willChangeSelectionFromCharacterRange oldSelectedCharRange: NSRange, toCharacterRange newSelectedCharRange: NSRange) -> NSRange
 //
 //
-//    // Delegate only.  Supersedes textView:willChangeSelectionFromCharacterRange:toCharacterRange:.  Return value must be a non-nil, non-empty array of objects responding to rangeValue.
 //    @MainActor optional func textView(_ textView: NSTextView, willChangeSelectionFromCharacterRanges oldSelectedCharRanges: [NSValue], toCharacterRanges newSelectedCharRanges: [NSValue]) -> [NSValue]
 //
 //
-//    // Delegate only.  Supersedes textView:shouldChangeTextInRange:replacementString:.  The affectedRanges argument obeys the same restrictions as selectedRanges, and the replacementStrings argument will either be nil (for attribute-only changes) or have the same number of elements as affectedRanges.
 //    @MainActor optional func textView(_ textView: NSTextView, shouldChangeTextInRanges affectedRanges: [NSValue], replacementStrings: [String]?) -> Bool
 //
 //
-//    // Delegate only.  The delegate should return newTypingAttributes to allow the change, oldTypingAttributes to prevent it, or some other dictionary to modify it.
-//    @available(macOS 10.0, *)
 //    @MainActor optional func textView(_ textView: NSTextView, shouldChangeTypingAttributes oldTypingAttributes: [String : Any] = [:], toAttributes newTypingAttributes: [NSAttributedString.Key : Any] = [:]) -> [NSAttributedString.Key : Any]
 //
 //
@@ -182,13 +182,12 @@ extension TextKitViewModel: NSUITextViewDelegate {
 //    // Delegate only. Notifies the delegate that the user selected the candidate at index in -[NSCandidateListTouchBarItem candidates] for textView.candidateListTouchBarItem. When no candidate selected, index is NSNotFound. Returning YES allows textView to insert the candidate into the text storage if it's NSString, NSAttributedString, or NSTextCheckingResult.
 //    @available(macOS 10.12.2, *)
 //    @MainActor optional func textView(_ textView: NSTextView, shouldSelectCandidateAt index: Int) -> Bool
+    // swiftlint:enable all
     #else
-    @available(iOS 2.0, *)
     public func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         textViewDelegate?.textViewShouldBeginEditing?(textView) ?? true // YES means do it
     }
 
-    @available(iOS 2.0, *)
     public func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textViewDelegate?.textViewShouldEndEditing?(textView) ?? true // YES means do it
     }
@@ -198,23 +197,19 @@ extension TextKitViewModel: NSUITextViewDelegate {
 //        textViewDelegate?.textViewDidBeginEditing?(textView)
 //    }
 
-    @available(iOS 2.0, *)
     public func textViewDidEndEditing(_ textView: UITextView) {
         textViewDelegate?.textViewDidEndEditing?(textView)
     }
     
-    @available(iOS 2.0, *)
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return textViewDelegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text) ?? true
     }
 
-    @available(iOS 2.0, *)
     public func textViewDidChange(_ textView: UITextView) {
         textViewDelegate?.textViewDidChange?(textView)
         nsuiTextDidChange(textView)
     }
     
-    @available(iOS 2.0, *)
     public func textViewDidChangeSelection(_ textView: UITextView) {
         textViewDelegate?.textViewDidChangeSelection?(textView)
     }

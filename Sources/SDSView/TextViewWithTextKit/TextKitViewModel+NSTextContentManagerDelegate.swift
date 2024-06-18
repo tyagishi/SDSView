@@ -16,15 +16,16 @@ import OSLog
 
 extension OSLog {
     // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextContentManagerDelegate")
-    static fileprivate var log = Logger(.disabled)
+    fileprivate static let log = Logger(.disabled)
 }
 
 extension TextKitViewModel: NSTextContentManagerDelegate {
     public func textContentManager(_ textContentManager: NSTextContentManager,
-                            textElementAt location: any NSTextLocation) -> NSTextElement? {
+                                   textElementAt location: any NSTextLocation) -> NSTextElement? {
         return nil
     }
-    public func textContentManager(_ textContentManager: NSTextContentManager, shouldEnumerate textElement: NSTextElement, options: NSTextContentManager.EnumerationOptions = []) -> Bool {
+    public func textContentManager(_ textContentManager: NSTextContentManager,
+                                   shouldEnumerate textElement: NSTextElement, options: NSTextContentManager.EnumerationOptions = []) -> Bool {
         // basically enumerate all
         return true
     }

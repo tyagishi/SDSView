@@ -15,7 +15,7 @@ import UIKit
 
 public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
     @Binding var text: String
-    var textViewDelegate: NSUITextViewDelegate? = nil
+    weak var textViewDelegate: NSUITextViewDelegate? = nil
     
     public init(_ text: Binding<String>) {
         self._text = text
@@ -35,26 +35,28 @@ public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
     
     #if os(macOS)
     // MARK: NSTextDelegate
-    @MainActor public func textShouldBeginEditing(_ textObject: NSText) -> Bool  {
+    @MainActor 
+    public func textShouldBeginEditing(_ textObject: NSText) -> Bool {
         textViewDelegate?.textShouldBeginEditing?(textObject) ?? true // YES means do it
     }
 
-    @MainActor public func textShouldEndEditing(_ textObject: NSText) -> Bool  {
+    @MainActor 
+    public func textShouldEndEditing(_ textObject: NSText) -> Bool {
         textViewDelegate?.textShouldEndEditing?(textObject) ?? true // YES means do it
     }
 
-    @available(macOS 10.10, *)
-    @MainActor public func textDidBeginEditing(_ notification: Notification) {
+    @MainActor
+    public func textDidBeginEditing(_ notification: Notification) {
         textViewDelegate?.textDidBeginEditing?(notification)
     }
 
-    @available(macOS 10.10, *)
-    @MainActor public func textDidEndEditing(_ notification: Notification) {
+    @MainActor
+    public func textDidEndEditing(_ notification: Notification) {
         textViewDelegate?.textDidEndEditing?(notification)
     }
 
-    @available(macOS 10.10, *)
-    @MainActor public func textDidChange(_ notification: Notification) {
+    @MainActor
+    public func textDidChange(_ notification: Notification) {
         guard let textView = notification.object as? NSUITextView else { return }
         textViewDelegate?.textDidChange?(notification)
         nsuiTextDidChange(textView)
@@ -62,18 +64,20 @@ public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
     
     // MARK: NSTextViewDelegate
     // note: add implementation one by one when it is necessary
-    @available(macOS 10.0, *)
-    @MainActor public func undoManager(for view: NSTextView) -> UndoManager? { textViewDelegate?.undoManager?(for: view) }
+    @MainActor
+    public func undoManager(for view: NSTextView) -> UndoManager? { textViewDelegate?.undoManager?(for: view) }
 
-    @MainActor public func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+    @MainActor
+    public func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
         textViewDelegate?.textView?(textView, doCommandBy: commandSelector) ?? false
     }
 
-    @available(macOS 10.5, *)
-    @MainActor public func textView(_ view: NSTextView, menu: NSMenu, for event: NSEvent, at charIndex: Int) -> NSMenu? {
+    @MainActor
+    public func textView(_ view: NSTextView, menu: NSMenu, for event: NSEvent, at charIndex: Int) -> NSMenu? {
         textViewDelegate?.textView?(view, menu: menu, for: event, at: charIndex)
     }
 
+    // swiftlint:disable all
     // Delegate only.
     //@MainActor func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool { }
     
@@ -188,39 +192,35 @@ public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
 //    // Delegate only. Notifies the delegate that the user selected the candidate at index in -[NSCandidateListTouchBarItem candidates] for textView.candidateListTouchBarItem. When no candidate selected, index is NSNotFound. Returning YES allows textView to insert the candidate into the text storage if it's NSString, NSAttributedString, or NSTextCheckingResult.
 //    @available(macOS 10.12.2, *)
 //    @MainActor optional func textView(_ textView: NSTextView, shouldSelectCandidateAt index: Int) -> Bool
+    // swiftlint:enable all
     #else
-    @available(iOS 2.0, *)
     public func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         textViewDelegate?.textViewShouldBeginEditing?(textView) ?? true // YES means do it
     }
 
-    @available(iOS 2.0, *)
     public func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textViewDelegate?.textViewShouldEndEditing?(textView) ?? true // YES means do it
     }
-    
-//    @available(iOS 2.0, *)
-//    public func textViewDidBeginEditing(_ textView: UITextView) {
-//        textViewDelegate?.textViewDidBeginEditing?(textView)
-//    }
 
-    @available(iOS 2.0, *)
+    //    @available(iOS 2.0, *)
+    //    public func textViewDidBeginEditing(_ textView: UITextView) {
+    //        textViewDelegate?.textViewDidBeginEditing?(textView)
+    //    }
+
     public func textViewDidEndEditing(_ textView: UITextView) {
         textViewDelegate?.textViewDidEndEditing?(textView)
     }
-    
-    @available(iOS 2.0, *)
-    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+
+    public func textView(_ textView: UITextView,
+                         shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return textViewDelegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text) ?? true
     }
 
-    @available(iOS 2.0, *)
     public func textViewDidChange(_ textView: UITextView) {
         textViewDelegate?.textViewDidChange?(textView)
         nsuiTextDidChange(textView)
     }
-    
-    @available(iOS 2.0, *)
+
     public func textViewDidChangeSelection(_ textView: UITextView) {
         textViewDelegate?.textViewDidChangeSelection?(textView)
     }

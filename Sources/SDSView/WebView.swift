@@ -40,9 +40,7 @@ public struct WebView: NSViewRepresentable {
     public func updateNSView(_ nsView: WKWebView, context: Context) {
         webviewUpdate(nsView)
     }
-
 }
 #elseif os(iOS)
 #warning("WebView for iOS is not implemented yet")
 #endif
-

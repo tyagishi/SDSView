@@ -41,6 +41,7 @@ public typealias EditActions = NSTextStorage.EditActions
 public struct ScrollTextView: NSViewRepresentable {
     public typealias NSViewType = NSScrollView
     public typealias Coordinator = TextKitTextViewDelegate
+    
     @Binding var text: String
     let textViewFactory: ScrollTextViewFactory
     //let textViewSetup: ScrollTextViewSetup
@@ -80,6 +81,7 @@ public struct ScrollTextView: NSViewRepresentable {
 public struct ScrollTextView: UIViewRepresentable {
     public typealias UIViewType = UITextView
     public typealias Coordinator = TextKitTextViewDelegate
+    
     @Binding var text: String
 
     let textViewFactory: ScrollTextViewFactory

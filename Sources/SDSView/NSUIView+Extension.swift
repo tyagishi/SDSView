@@ -21,6 +21,7 @@ extension NSUIView {
         get {
             true
         }
+        // swiftlint:disable:next unused_setter_value
         set(newValue) {
             setNeedsLayout()
         }
@@ -29,6 +30,7 @@ extension NSUIView {
         get {
             true
         }
+        // swiftlint:disable:next unused_setter_value
         set(newValue) {
             setNeedsDisplay()
         }

@@ -43,7 +43,7 @@ public protocol SpaceCapableTableViewDelegate: NSTableViewDelegate {
     var spacePressed: ((NSEvent) -> Bool)? { get }
 }
 
-final public class SpaceCapableTableView: NSTableView {
+public final class SpaceCapableTableView: NSTableView {
     override public func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.keyCode == 49,
            let delegate = self.delegate as? SpaceCapableTableViewDelegate,

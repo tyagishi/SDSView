@@ -17,14 +17,16 @@ import OSLog
 
 extension OSLog {
     // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "ViewModel")
-    static fileprivate var log = Logger(.disabled)
+    fileprivate static let log = Logger(.disabled)
 }
 
 public protocol TextViewModelProtocol {
+    // swiftlint:disable identifier_name
     var _textView: NSUITextView? { get set }
     var _scrollView: NSUIScrollView? { get set }
     var textChanged: AnyPublisher<String, Never> { get }
     var _textChanged: PassthroughSubject<String, Never> { get }
+    // swiftlint:enable identifier_name
 }
 
 extension TextViewModelProtocol {
@@ -32,13 +34,14 @@ extension TextViewModelProtocol {
 }
 
 open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
+    // swiftlint:disable identifier_name
     public var _textView: NSUITextView? = nil
     public var _scrollView: NSUIScrollView? = nil
-    
-    var textViewDelegate: NSUITextViewDelegate?
-    
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
-    
+    // swiftlint:enable identifier_name
+
+    weak var textViewDelegate: NSUITextViewDelegate?
+
     var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
     internal var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
 
@@ -94,13 +97,13 @@ extension TextKitViewModel {
         #else // for iOS
         let textView = UITextView(usingTextLayoutManager: true)
         textView.string = text
-        textView.textContainer.size = CGSize(width: 0, height: 0)
+        textView.textContainer.size = .zero
         self._textView = textView
         textView.delegate = self
 
         textView.textContainerInset = .init(top: 0, left: 0, bottom: 0, right: 0)
 
-        if self is NSTextContentManagerDelegate { textView.textContentStorage?.delegate = self }
+        if self is NSTextContentManagerDelegate { textView.textLayoutManager?.textContentManager?.delegate = self }
         if self is NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = self }
         if self is NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = self }
 
@@ -110,7 +113,7 @@ extension TextKitViewModel {
         #endif
     }
     
-    public func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) -> Void {
+    public func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) {
         OSLog.log.debug(#function)
         guard let textView = _textView else { return }
         //textView.string = text

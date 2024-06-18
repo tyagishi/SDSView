@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import SDSNSUIBridge
 #if os(macOS)
 import AppKit
@@ -17,7 +16,7 @@ import OSLog
 
 extension OSLog {
     // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextViewportLayoutControllerDelegate")
-    static fileprivate var log = Logger(.disabled)
+    fileprivate static var log = Logger(.disabled)
 }
 
 extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
@@ -87,7 +86,7 @@ extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
         // }
 
         textLayoutManager.enumerateTextLayoutFragments(from: textLayoutManager.documentRange.location,
-                                                        options: [.ensuresLayout]) { layoutFragment in
+                                                       options: [.ensuresLayout]) { layoutFragment in
             //height += layoutFragment.layoutFragmentFrame.height
             height = layoutFragment.layoutFragmentFrame.maxY
             return true
@@ -117,6 +116,7 @@ final class TextLayoutFragmentView: NSUIView {
         #endif
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
