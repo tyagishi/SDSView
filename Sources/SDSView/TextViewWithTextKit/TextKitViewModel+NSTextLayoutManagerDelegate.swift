@@ -15,10 +15,11 @@ import UIKit
 import OSLog
 
 extension OSLog {
-    // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextLayoutManagerDelegate")
+    // fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextLayoutManagerDelegate")
     fileprivate static var log = Logger(.disabled)
 }
 
+#if false // use this as template
 extension TextKitViewModel: NSTextLayoutManagerDelegate {
     public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
                                   textLayoutFragmentFor location: any NSTextLocation,
@@ -27,3 +28,4 @@ extension TextKitViewModel: NSTextLayoutManagerDelegate {
         return NSTextLayoutFragment(textElement: textElement, range: nil)
     }
 }
+#endif

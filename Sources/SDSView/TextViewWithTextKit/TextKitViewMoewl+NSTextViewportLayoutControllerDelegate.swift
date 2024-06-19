@@ -19,6 +19,7 @@ extension OSLog {
     fileprivate static var log = Logger(.disabled)
 }
 
+#if false // use this as template
 extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
     public func viewportBounds(for textViewportLayoutController: NSTextViewportLayoutController) -> CGRect {
         guard let textView = _textView else { return .zero }
@@ -98,6 +99,7 @@ extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
         }
     }
 }
+#endif
 
 final class TextLayoutFragmentView: NSUIView {
     private let layoutFragment: NSTextLayoutFragment

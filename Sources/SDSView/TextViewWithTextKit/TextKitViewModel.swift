@@ -82,9 +82,9 @@ extension TextKitViewModel {
         // note: textView.textContiner.lineFragmentPadding has 5.0 as default
 
         // set delegate
-        if self is NSTextContentManagerDelegate { textView.textContentStorage?.delegate = self }
-        if self is NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = self }
-        if self is NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = self }
+        if let delegate = self as? NSTextContentStorageDelegate { textView.textContentStorage?.delegate = delegate }
+        if let delegate = self as? NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = delegate }
+        if let delegate = self as? NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = delegate }
 
         // MARK: build-up
         scrollView.documentView = textView
@@ -103,9 +103,9 @@ extension TextKitViewModel {
 
         textView.textContainerInset = .init(top: 0, left: 0, bottom: 0, right: 0)
 
-        if self is NSTextContentManagerDelegate { textView.textLayoutManager?.textContentManager?.delegate = self }
-        if self is NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = self }
-        if self is NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = self }
+        if let delegate = self as? NSTextContentStorageDelegate { textView.textLayoutManager?.textContentManager?.delegate = delegate }
+        if let delegate = self as? NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = delegate }
+        if let delegate = self as? NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = delegate }
 
         textView.addSubview(contentView)
 
