@@ -47,6 +47,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         // self.fragmentViewMap = .weakToWeakObjects()
     }
     
+    @MainActor
     public func forceLayout() {
         guard let textView = _textView,
               let textLayoutManager = textView.textLayoutManager else { return }
