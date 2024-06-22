@@ -53,10 +53,8 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
               let textLayoutManager = textView.textLayoutManager else { return }
         textLayoutManager.textViewportLayoutController.layoutViewport()
     }
-}
 
-extension TextKitViewModel {
-    public func textViewFactory(_ text: String) -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
+    open func textViewFactory(_ text: String) -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
         #if os(macOS)
         // MARK: NSScrollView
         let scrollView = NSUIScrollView()
@@ -111,7 +109,7 @@ extension TextKitViewModel {
         #endif
     }
     
-    public func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) {
+    open func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) {
         OSLog.log.debug(#function)
         guard let textView = _textView else { return }
         //textView.string = text
