@@ -15,7 +15,7 @@ import UIKit
 import OSLog
 
 extension OSLog {
-    // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "TextKitViewModel: NSTextViewportLayoutControllerDelegate")
+    // fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdsview", category: "TextKitViewModel+NSTextViewportLayoutControllerDelegate")
     fileprivate static var log = Logger(.disabled)
 }
 
@@ -101,14 +101,15 @@ extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
 }
 #endif
 
-final class TextLayoutFragmentView: NSUIView {
+#if false
+public final class TextLayoutFragmentView: NSUIView {
     private let layoutFragment: NSTextLayoutFragment
 
     #if os(macOS)
-    override var isFlipped: Bool { return true }
+    override public var isFlipped: Bool { return true }
     #endif
 
-    init(layoutFragment: NSTextLayoutFragment, frame: CGRect) {
+    public init(layoutFragment: NSTextLayoutFragment, frame: CGRect) {
         self.layoutFragment = layoutFragment
         super.init(frame: frame)
         needsLayout = true
@@ -123,7 +124,7 @@ final class TextLayoutFragmentView: NSUIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func draw(_ dirtyRect: CGRect) {
+    override public func draw(_ dirtyRect: CGRect) {
         #if os(macOS)
         guard let context = NSGraphicsContext.current?.cgContext else { return }
         let pos: CGPoint = .zero
@@ -138,3 +139,4 @@ final class TextLayoutFragmentView: NSUIView {
         context.restoreGState()
     }
 }
+#endif

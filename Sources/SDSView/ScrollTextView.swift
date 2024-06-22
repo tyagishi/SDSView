@@ -73,7 +73,7 @@ public struct ScrollTextView: NSViewRepresentable {
     @MainActor
     public func updateNSView(_ scrollView: NSViewType, context: Context) {
         guard let textView = scrollView.documentView as? NSUITextView else { return }
-        textView.delegate = context.coordinator
+        //textView.delegate = context.coordinator
         textViewUpdate(textView, scrollView, text)
     }
 }

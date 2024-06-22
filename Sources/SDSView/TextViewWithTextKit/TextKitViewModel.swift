@@ -16,7 +16,7 @@ import UIKit
 import OSLog
 
 extension OSLog {
-    // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.vanillaTextView", category: "ViewModel")
+    // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.sdsview", category: "TextKitViewModel")
     fileprivate static let log = Logger(.disabled)
 }
 
@@ -40,14 +40,11 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
 
-    weak var textViewDelegate: NSUITextViewDelegate?
+    public var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
+    // public var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
 
-    var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
-    internal var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
-
-    public init(textViewDelegate: NSUITextViewDelegate? = nil) {
-        self.textViewDelegate = textViewDelegate
-        self.fragmentViewMap = .weakToWeakObjects()
+    override public init() {
+        // self.fragmentViewMap = .weakToWeakObjects()
     }
     
     public func forceLayout() {
@@ -93,7 +90,7 @@ extension TextKitViewModel {
         
         textView.addSubview(contentView)
 
-        return (textView, scrollView, nil)
+        return (textView, scrollView, self)
         #else // for iOS
         let textView = UITextView(usingTextLayoutManager: true)
         textView.string = text
@@ -109,7 +106,7 @@ extension TextKitViewModel {
 
         textView.addSubview(contentView)
 
-        return (textView, textView, nil)
+        return (textView, textView, selfcd)
         #endif
     }
     
@@ -122,8 +119,8 @@ extension TextKitViewModel {
     }
 }
 
-final class LayoutFragmentRootView: NSUIView {
+public final class LayoutFragmentRootView: NSUIView {
     #if os(macOS)
-    override var isFlipped: Bool { return true }
+    override public var isFlipped: Bool { return true }
     #endif
 }
