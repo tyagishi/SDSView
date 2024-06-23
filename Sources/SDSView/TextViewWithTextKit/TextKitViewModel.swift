@@ -15,8 +15,10 @@ import UIKit
 #endif
 import OSLog
 
+private var module = "com.smalldesksoftware.sdsview"
+
 extension OSLog {
-    // static fileprivate var log = Logger(subsystem: "com.smalldesksoftware.sdsview", category: "TextKitViewModel")
+    // fileprivate static var log = Logger(subsystem: module, category: "TextKitViewModel")
     fileprivate static let log = Logger(.disabled)
 }
 
@@ -51,6 +53,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     public func forceLayout() {
         guard let textView = _textView,
               let textLayoutManager = textView.textLayoutManager else { return }
+        OSLog.log.debug("force to re-layout")
         textLayoutManager.textViewportLayoutController.layoutViewport()
     }
 
