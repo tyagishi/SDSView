@@ -108,7 +108,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
 
         textView.addSubview(contentView)
 
-        return (textView, textView, selfcd)
+        return (textView, textView, self)
         #endif
     }
     

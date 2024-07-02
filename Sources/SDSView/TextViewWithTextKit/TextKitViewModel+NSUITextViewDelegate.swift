@@ -39,7 +39,7 @@ extension TextKitViewModel: NSUITextViewDelegate {
     #else
     // MARK: UITextDelegate
     open func textViewDidChange(_ textView: UITextView) {
-        textViewDelegate?.textViewDidChange?(textView)
+        //textViewDelegate?.textViewDidChange?(textView)
         nsuiTextDidChange(textView)
     }
     #endif
