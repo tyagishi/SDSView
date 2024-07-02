@@ -20,6 +20,7 @@ extension OSLog {
 }
 
 #if false // use this as template
+// Note: need to prepare contentView under NSUITextView for adding TextLayoutFragmentView (for NSTextLayoutFragment)
 extension TextKitViewModel: NSTextViewportLayoutControllerDelegate {
     public func viewportBounds(for textViewportLayoutController: NSTextViewportLayoutController) -> CGRect {
         guard let textView = _textView else { return .zero }

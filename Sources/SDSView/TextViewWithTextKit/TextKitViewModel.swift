@@ -35,6 +35,9 @@ extension TextViewModelProtocol {
     public var textChanged: AnyPublisher<String, Never> { _textChanged.eraseToAnyPublisher() }
 }
 
+/// viewModel for wrapped TextView
+/// responsibility: changes in NSUITextView will be notified via textChanged publisher
+///                 provide default implementation for textViewFactory, textViewUpdate
 open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     // swiftlint:disable identifier_name
     public var _textView: NSUITextView? = nil
@@ -42,7 +45,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
 
-    public var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
+    //public var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
     // public var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
 
     override public init() {
@@ -90,8 +93,6 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         self._textView = textView
         self._scrollView = scrollView
         
-        textView.addSubview(contentView)
-
         return (textView, scrollView, self)
         #else // for iOS
         let textView = UITextView(usingTextLayoutManager: true)
@@ -106,8 +107,6 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         if let delegate = self as? NSTextLayoutManagerDelegate { textView.textLayoutManager?.delegate = delegate }
         if let delegate = self as? NSTextViewportLayoutControllerDelegate { textView.textLayoutManager?.textViewportLayoutController.delegate = delegate }
 
-        textView.addSubview(contentView)
-
         return (textView, textView, self)
         #endif
     }
@@ -119,10 +118,4 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         textView.needsLayout = true
         textView.needsDisplay = true
     }
-}
-
-public final class LayoutFragmentRootView: NSUIView {
-    #if os(macOS)
-    override public var isFlipped: Bool { return true }
-    #endif
 }
