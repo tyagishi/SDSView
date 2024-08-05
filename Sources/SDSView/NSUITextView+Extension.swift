@@ -29,6 +29,14 @@ public protocol NSUITextViewDelegate: UITextViewDelegate {
 #endif
 
 extension NSUITextView {
+    public var nsuiTextContentStorage: NSTextContentStorage? {
+        #if os(macOS)
+        return self.textContentStorage
+        #else // os(iOS)
+        return self.textLayoutManager?.textContentManager as? NSTextContentStorage
+        #endif
+    }
+    
     public var nsuiTextStorage: NSTextStorage {
         #if os(macOS)
         if let textStorage = self.textStorage { return textStorage }
