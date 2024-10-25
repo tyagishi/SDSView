@@ -19,14 +19,6 @@ import UIKit
 public protocol NSUITextViewDelegate: NSTextViewDelegate {
     @MainActor
     func nsuiTextDidChange(_ textView: NSUITextView)
-    @MainActor
-    func nsuiTextDidBeginEditing(_ textView: NSUITextView)
-}
-
-extension NSUITextViewDelegate {
-    public func nsuiTextDidBeginEditing(_ textView: NSUITextView) {
-        print(#function)
-    }
 }
 #else
 public protocol NSUITextViewDelegate: UITextViewDelegate {
