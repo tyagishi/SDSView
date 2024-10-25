@@ -1,5 +1,5 @@
 //
-//  TextKitViewDelegate.swift
+//  TextKitTextViewDelegate.swift
 //
 //  Created by : Tomoaki Yagishita on 2024/06/15
 //  © 2024  SmallDeskSoftware

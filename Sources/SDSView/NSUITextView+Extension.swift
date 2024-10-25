@@ -16,18 +16,6 @@ import UIKit
 #error("unsupported platform")
 #endif
 
-#if os(macOS)
-public protocol NSUITextViewDelegate: NSTextViewDelegate {
-    @MainActor
-    func nsuiTextDidChange(_ textView: NSUITextView)
-}
-#else
-public protocol NSUITextViewDelegate: UITextViewDelegate {
-    @MainActor
-    func nsuiTextDidChange(_ textView: NSUITextView)
-}
-#endif
-
 extension NSUITextView {
     public var nsuiTextContentStorage: NSTextContentStorage? {
         #if os(macOS)
