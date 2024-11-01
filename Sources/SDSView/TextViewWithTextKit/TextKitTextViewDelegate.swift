@@ -77,10 +77,13 @@ public final class TextKitTextViewDelegate: NSObject, NSUITextViewDelegate {
         textViewDelegate?.textView?(view, menu: menu, for: event, at: charIndex)
     }
 
-    // swiftlint:disable all
     // Delegate only.
-    //@MainActor func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool { }
+    @MainActor
+    public func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
+        return textViewDelegate?.textView?(textView, clickedOnLink: link, at: charIndex) ?? false
+    }
     
+    // swiftlint:disable all
 //
 //
 //    // Delegate only.
