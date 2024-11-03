@@ -75,7 +75,6 @@ public struct PDFPageView: View {
                           let document = pdfView.document,
                           let newCurrentPage = pdfView.currentPage else { return }
                     let newPageIndex = document.index(for: newCurrentPage)
-                    print("page changed \(newPageIndex)")
                     self.currentPage = newPageIndex
                 })
         }
