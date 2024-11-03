@@ -22,29 +22,80 @@ import PDFKit
 
 public struct PDFPageViewConfig {
     let displayMode: PDFDisplayMode
+    //let displayDirection: PDFDisplayDirection
     let autoScales: Bool
-    public init(displayMode: PDFDisplayMode, autoScales: Bool) {
+
+    public init(displayMode: PDFDisplayMode,
+                //displayDirection: PDFDisplayDirection,
+                autoScales: Bool) {
         self.displayMode = displayMode
+        //self.displayDirection = displayDirection
         self.autoScales = autoScales
     }
 }
 
-#if os(macOS)
-public struct PDFPageView: NSViewRepresentable {
-    public typealias NSViewType = PDFView
-    //public typealias Coordinator = TextKitTextViewDelegate
-
+public struct PDFPageView: View {
     let pdfDocument: PDFDocument
-    let config: PDFPageViewConfig?
-    
-    public init(doc pdfDocument: PDFDocument, config: PDFPageViewConfig? = nil) {
+    @State private var currentPage: Int
+    let config: PDFPageViewConfig
+
+    public init(pdfDocument: PDFDocument,
+                config: PDFPageViewConfig,
+                startPage: Int? = 0) {
         self.pdfDocument = pdfDocument
+        self.currentPage = startPage ?? 0
         self.config = config
     }
     
-//    public func makeCoordinator() -> TextKitTextViewDelegate {
-//        return TextKitTextViewDelegate($text)
-//    }
+    public var body: some View {
+        ZStack {
+            HStack {
+                let pageCount = pdfDocument.pageCount
+                Spacer()
+                Button(action: {
+                    currentPage -= 1
+                }, label: { Image(systemName: "arrow.backward.circle")})
+                .buttonStyle(.borderless)
+                .disabled(currentPage == 0)
+                //.keyboardShortcut(.upArrow, modifiers: [])
+                .keyboardShortcut(.leftArrow, modifiers: [])
+                Text("\(currentPage)/\(pageCount-1)")
+                Button(action: {
+                    currentPage += 1
+                }, label: { Image(systemName: "arrow.forward.circle")})
+                .buttonStyle(.borderless)
+                .disabled((pageCount-1) <= currentPage )
+                //.keyboardShortcut(.downArrow, modifiers: [])
+                .keyboardShortcut(.rightArrow, modifiers: [])
+            }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing).zIndex(1)
+            WrappedPDFView(doc: pdfDocument, page: $currentPage, config: config)
+                .onReceive(NotificationCenter.default.publisher(for: Notification.Name.PDFViewPageChanged, object: nil),
+                           perform: { change in
+                    guard let pdfView = change.object as? PDFView,
+                          let document = pdfView.document,
+                          let newCurrentPage = pdfView.currentPage else { return }
+                    let newPageIndex = document.index(for: newCurrentPage)
+                    print("page changed \(newPageIndex)")
+                    self.currentPage = newPageIndex
+                })
+        }
+    }
+}
+
+#if os(macOS)
+public struct WrappedPDFView: NSViewRepresentable {
+    public typealias NSViewType = PDFView
+    let pdfDocument: PDFDocument
+    @Binding var page: Int
+    let config: PDFPageViewConfig?
+    
+    public init(doc pdfDocument: PDFDocument,
+                page: Binding<Int>,
+                config: PDFPageViewConfig? = nil) {
+        self.pdfDocument = pdfDocument
+        self._page = page
+        self.config = config
+    }
 
     @MainActor
     public func makeNSView(context: Context) -> NSViewType {
@@ -60,6 +111,10 @@ public struct PDFPageView: NSViewRepresentable {
             pdfView.document = pdfDocument
             applyConfig(pdfView)
         }
+        if let targetPage = pdfView.document?.page(at: page),
+           pdfView.currentPage != targetPage {
+            pdfView.go(to: targetPage)
+        }
     }
     
     internal func applyConfig(_ pdfView: PDFView) {
@@ -70,45 +125,45 @@ public struct PDFPageView: NSViewRepresentable {
     }
 }
 #elseif os(iOS)
-public struct PDFPageView: UIViewRepresentable {
-    public typealias UIViewType = UITextView
-    public typealias Coordinator = TextKitTextViewDelegate
+public struct WrappedPDFView: UIViewRepresentable {
+    public typealias UIViewType = PDFView
+    let pdfDocument: PDFDocument
+    @Binding var page: Int
+    let config: PDFPageViewConfig?
     
-    @Binding var text: String
-
-    let textViewFactory: ScrollTextViewFactory
-    //let textViewSetup: ScrollTextViewSetup
-    let textViewUpdate: ScrollTextViewUpdate
-
-    public init(text: Binding<String>,
-                textViewFactory: @escaping ScrollTextViewFactory,
-                //textViewSetup: @escaping ScrollTextViewSetup,
-                textViewUpdate: @escaping ScrollTextViewUpdate) {
-        self._text = text
-        self.textViewFactory = textViewFactory
-        //self.textViewSetup = textViewSetup
-        self.textViewUpdate = textViewUpdate
-    }
-
-    public func makeCoordinator() -> TextKitTextViewDelegate {
-        return TextKitTextViewDelegate($text)
+    public init(doc pdfDocument: PDFDocument,
+                page: Binding<Int>,
+                config: PDFPageViewConfig? = nil) {
+        self.pdfDocument = pdfDocument
+        self._page = page
+        self.config = config
     }
 
     @MainActor
     public func makeUIView(context: Context) -> UIViewType {
-        let (textView, _, localDelegate) = textViewFactory(text)
-        context.coordinator.textViewDelegate = localDelegate
-        textView.delegate = context.coordinator
-        //textViewSetup(textView, scrollView)
-        return textView
+        let pdfView = PDFView()
+        pdfView.document = pdfDocument
+        applyConfig(pdfView)
+        return pdfView
     }
-
+    
     @MainActor
-    public func updateUIView(_ textView: UIViewType, context: Context) {
-        textView.delegate = context.coordinator
-        textViewUpdate(textView, textView, text)
+    public func updateUIView(_ pdfView: UIViewType, context: Context) {
+        if pdfView.document != pdfDocument {
+            pdfView.document = pdfDocument
+            applyConfig(pdfView)
+        }
+        if let targetPage = pdfView.document?.page(at: page),
+           pdfView.currentPage != targetPage {
+            pdfView.go(to: targetPage)
+        }
+    }
+    
+    internal func applyConfig(_ pdfView: PDFView) {
+        if let config = config {
+            pdfView.displayMode = config.displayMode
+            pdfView.autoScales = config.autoScales
+        }
     }
 }
 #endif
-
-

@@ -23,7 +23,8 @@ struct ContentView: View {
                 .foregroundStyle(.tint)
             Text("Hello, world!")
             if let pdfDoc = pdfDoc {
-                PDFPageView(doc: pdfDoc, config: PDFPageViewConfig(displayMode: .singlePage, autoScales: true))
+                PDFPageView(pdfDocument: pdfDoc,
+                            config: PDFPageViewConfig(displayMode: .singlePage, autoScales: true))
             } else {
                 Text("NoPDF doc")
             }
