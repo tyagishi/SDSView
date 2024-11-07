@@ -45,11 +45,7 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
 
-    //public var contentView: LayoutFragmentRootView = LayoutFragmentRootView()
-    // public var fragmentViewMap: NSMapTable<NSTextLayoutFragment, TextLayoutFragmentView>
-
     override public init() {
-        // self.fragmentViewMap = .weakToWeakObjects()
     }
     
     @MainActor
@@ -72,7 +68,10 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         textView.autoresizingMask = [.height, .width]
         textView.delegate = self
         textView.string = text
-        
+        //textView.textColor = .darkGray
+        //textView.backgroundColor = .white
+        textView.usesAdaptiveColorMappingForDarkAppearance = true
+
         // care cursor
         if #available(macOS 14, *) {
             let insertionIndicator = NSTextInsertionIndicator(frame: .zero)
@@ -101,6 +100,10 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         self._textView = textView
         textView.delegate = self
 
+        //textView.textColor = .darkGray
+        //textView.backgroundColor = .white
+        //textView.overrideUserInterfaceStyle = .dark
+        
         textView.textContainerInset = .init(top: 0, left: 0, bottom: 0, right: 0)
 
         if let delegate = self as? NSTextContentStorageDelegate { textView.textLayoutManager?.textContentManager?.delegate = delegate }
