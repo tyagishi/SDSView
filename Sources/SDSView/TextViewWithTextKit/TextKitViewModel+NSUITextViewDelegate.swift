@@ -43,4 +43,21 @@ extension TextKitViewModel: NSUITextViewDelegate {
         nsuiTextDidChange(textView)
     }
     #endif
+    
+    // note: experimental
+    @MainActor
+    public func replaceCharacters(in range: NSRange, with str: String) {
+        guard let textView = _textView else { return }
+        let textStorage = textView.nsuiTextStorage
+        
+        #if os(macOS)
+        guard textView.shouldChangeText(in: range, replacementString: str) else { return }
+        #endif
+        textStorage.replaceCharacters(in: range, with: str)
+        textStorage.edited(.editedCharacters, range: range,
+                           changeInLength: (str as NSString).length - range.length)
+        #if os(macOS)
+        textView.didChangeText()
+        #endif
+    }
 }
