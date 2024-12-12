@@ -44,6 +44,8 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     public var _scrollView: NSUIScrollView? = nil
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
+    
+    public var dic: [String: Any] = [:]
 
     override public init() {
     }
@@ -51,8 +53,10 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     @MainActor
     public func forceLayout() {
         guard let textView = _textView,
+              let textStorage = textView.textStorage,
               let textLayoutManager = textView.textLayoutManager else { return }
         OSLog.log.debug("force to re-layout")
+        textStorage.edited(.editedAttributes, range: NSRange(location: 0, length: (textView.string as NSString).length), changeInLength: 0)
         textLayoutManager.textViewportLayoutController.layoutViewport()
     }
 
