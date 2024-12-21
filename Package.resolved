@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "sdsviewextension",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tyagishi/SDSViewExtension",
+      "state" : {
+        "revision" : "41f5e12536dba76c3582299d2b1d194f716a3cbf",
+        "version" : "4.2.0"
+      }
+    },
+    {
       "identity" : "swiftlintplugins",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
