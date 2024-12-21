@@ -13,9 +13,9 @@ import SDSViewExtension
 public protocol SearchTarget: ObservableObject {
     associatedtype SearchResult
 
-    @MainActor func search(_ keyword: String,_ ignoreCase: Bool)
+    func search(_ keyword: String,_ ignoreCase: Bool)
 
-    @MainActor var searchResultRanges: [SearchResult] { get }
+    var searchResultRanges: [SearchResult] { get }
     @MainActor func clearSearchResult()
 
     @MainActor func emphasizeNextSearchResult()
@@ -101,8 +101,3 @@ public struct SearchBar<T: SearchTarget>: View {
         }
     }
 }
-
-//#Preview {
-//    SearchBar(target: TextKitViewModel(), focusSearchField: .constant(false))
-//}
-
