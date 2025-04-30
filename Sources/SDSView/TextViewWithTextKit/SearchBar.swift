@@ -45,7 +45,6 @@ public struct SearchBar<T: SearchTarget>: View {
     public var body: some View {
         HStack {
             Image(systemName: "text.magnifyingglass")
-            let matchNum = target.searchResultRanges.count
             ZStack {
                 TextField("Search", text: $searchKey)
                     .textFieldStyle(.roundedBorder)
@@ -56,8 +55,8 @@ public struct SearchBar<T: SearchTarget>: View {
                         target.search(searchKey, ignoreCase)
                     })
                 HStack {
-                    Text("\(matchNum) matches").font(.footnote)
-                        .opacity(matchNum == 0 ? 0.0 : 1.0)
+                    Text("\(target.searchResultRanges.count) matches").font(.footnote)
+                        .opacity(target.searchResultRanges.isEmpty ? 0.0 : 1.0)
                     Image(systemName: "x.circle")
                         .opacity(searchKey == "" ? 0.1 : 1.0)
                         .disabled(searchKey=="")
@@ -69,24 +68,16 @@ public struct SearchBar<T: SearchTarget>: View {
                    label: { Image(systemName: "textformat")
                     .modify({ if !ignoreCase { $0.foregroundStyle(.tint) } else { $0 } })
             })
-            .modify {
-                if #available(macOS 14,*) {
-                    $0.buttonStyle(.accessoryBar)
-                } else {
-                    $0
-                }
-            }
             Button(action: {
                 target.emphasizePrevSearchResult()
             }, label: { Image(systemName: "arrowtriangle.left") })
             .keyboardShortcut("g", modifiers: [.command, .shift])
-            .disabled(matchNum == 0)
+            .disabled(target.searchResultRanges.isEmpty)
             Button(action: {
                 target.emphasizeNextSearchResult()
             }, label: { Image(systemName: "arrowtriangle.right") })
             .keyboardShortcut("g", modifiers: [.command])
-            .disabled(matchNum == 0)
-
+            .disabled(target.searchResultRanges.isEmpty)
         }
         .modify {
             if #available(macOS 14,*) {
