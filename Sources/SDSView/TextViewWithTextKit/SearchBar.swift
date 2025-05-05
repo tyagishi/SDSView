@@ -13,7 +13,7 @@ import SDSViewExtension
 public protocol SearchTarget: ObservableObject {
     associatedtype SearchResult
 
-    func search(_ keyword: String,_ ignoreCase: Bool)
+    @MainActor func search(_ keyword: String,_ ignoreCase: Bool)
 
     var searchResultRanges: [SearchResult] { get }
     @MainActor func clearSearchResult()
