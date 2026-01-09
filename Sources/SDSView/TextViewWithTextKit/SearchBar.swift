@@ -80,11 +80,15 @@ public struct SearchBar<T: SearchTarget>: View {
             .disabled(target.searchResultRanges.isEmpty)
         }
         .modify {
-            if #available(macOS 14,*) {
+            #if os(macOS)
+            if #available(macOS 14, *) {
                 $0.buttonStyle(.accessoryBar)
             } else {
                 $0
             }
+            #else
+            $0
+            #endif
         }
         .onReceive(target.targetChangedPublisher) { _ in
             target.clearSearchResult()

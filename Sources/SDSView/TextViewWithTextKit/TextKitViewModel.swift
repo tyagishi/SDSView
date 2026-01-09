@@ -53,9 +53,9 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
     @MainActor
     public func forceLayout() {
         guard let textView = _textView,
-              let textStorage = textView.textStorage,
               let textLayoutManager = textView.textLayoutManager else { return }
         OSLog.log.debug("force to re-layout")
+        let textStorage = textView.nsuiTextStorage
         textStorage.edited(.editedAttributes, range: NSRange(location: 0, length: (textView.string as NSString).length), changeInLength: 0)
         textLayoutManager.textViewportLayoutController.layoutViewport()
     }
