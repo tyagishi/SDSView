@@ -20,6 +20,7 @@ extension OSLog {
     fileprivate static var log = Logger(.disabled)
 }
 
+@available(macOS 14, iOS 17, *)
 extension TextKitViewModel: NSUITextViewDelegate {
     public func nsuiTextDidChange(_ textView: SDSView.NSUITextView) {
         _textChanged.send(textView.string)
@@ -29,7 +30,6 @@ extension TextKitViewModel: NSUITextViewDelegate {
     }
     #if os(macOS)
     // MARK: NSTextDelegate
-    @available(macOS 10.10, *)
     @MainActor
     open func textDidChange(_ notification: Notification) {
         guard let textView = _textView else { return }

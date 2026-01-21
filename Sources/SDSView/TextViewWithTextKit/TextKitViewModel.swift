@@ -8,6 +8,7 @@
 import Foundation
 import SDSNSUIBridge
 import Combine
+import Observation
 #if os(macOS)
 import AppKit
 #else
@@ -38,10 +39,12 @@ extension TextViewModelProtocol {
 /// viewModel for wrapped TextView
 /// responsibility: changes in NSUITextView will be notified via textChanged publisher
 ///                 provide default implementation for textViewFactory, textViewUpdate
-open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
+@available(macOS 14, iOS 17, *)
+@Observable
+open class TextKitViewModel: NSObject, TextViewModelProtocol {
     // swiftlint:disable identifier_name
-    public var _textView: NSUITextView? = nil
-    public var _scrollView: NSUIScrollView? = nil
+    @ObservationIgnored  public var _textView: NSUITextView? = nil
+    @ObservationIgnored public var _scrollView: NSUIScrollView? = nil
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
     
@@ -77,10 +80,8 @@ open class TextKitViewModel: NSObject, ObservableObject, TextViewModelProtocol {
         textView.usesAdaptiveColorMappingForDarkAppearance = true
 
         // care cursor
-        if #available(macOS 14, *) {
-            let insertionIndicator = NSTextInsertionIndicator(frame: .zero)
-            textView.addSubview(insertionIndicator)
-        }
+        let insertionIndicator = NSTextInsertionIndicator(frame: .zero)
+        textView.addSubview(insertionIndicator)
         
         textView.allowsUndo = true
         textView.textContainer?.size = NSSize(width: 0, height: 0) // 0 means no-limitation
