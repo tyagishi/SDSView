@@ -13,7 +13,7 @@ import UIKit
 #endif
 
 extension NSTextElement {
-    var attrString: NSAttributedString? {
+    public var attrString: NSAttributedString? {
         guard let textContentStorage = textContentManager as? NSTextContentStorage,
               let attrString = textContentStorage.attributedString(for: self) else { return nil }
         return attrString
@@ -21,7 +21,7 @@ extension NSTextElement {
 }
 
 extension NSTextLayoutFragment {
-    var attrString: NSAttributedString? {
+    public var attrString: NSAttributedString? {
         guard let textElement = textElement,
               let textContentStorage = textElement.textContentManager as? NSTextContentStorage,
               let attrString = textContentStorage.attributedString(for: textElement) else { return nil }

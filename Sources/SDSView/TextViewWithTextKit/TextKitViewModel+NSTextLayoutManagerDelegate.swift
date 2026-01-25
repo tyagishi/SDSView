@@ -22,6 +22,17 @@ extension OSLog {
 #if false // use this as template
 extension TextKitViewModel: NSTextLayoutManagerDelegate {
     public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
+                                  renderingAttributesForLink link: Any,
+                                  at location: any NSTextLocation,
+                                  defaultAttributes renderingAttributes: [NSAttributedString.Key : Any] = [:] ) -> [NSAttributedString.Key : Any]? {
+        nil
+    }
+    public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
+                                  shouldBreakLineBefore location: any NSTextLocation,
+                                  hyphenating: Bool ) -> Bool {
+        false
+    }
+    public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
                                   textLayoutFragmentFor location: any NSTextLocation,
                                   in textElement: NSTextElement) -> NSTextLayoutFragment {
         OSLog.log.debug("textLayoutFragmentFor: \(textElement.attrString?.string ?? "no-text")")
