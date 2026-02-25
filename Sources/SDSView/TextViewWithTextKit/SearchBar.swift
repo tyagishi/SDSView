@@ -43,7 +43,7 @@ public struct SearchBar<T: SearchTarget>: View {
     }
     
     public var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             Image(systemName: "text.magnifyingglass")
             ZStack {
                 TextField("Search", text: $searchKey)
