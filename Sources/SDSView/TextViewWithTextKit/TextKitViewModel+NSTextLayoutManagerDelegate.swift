@@ -24,7 +24,7 @@ extension TextKitViewModel: NSTextLayoutManagerDelegate {
     public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
                                   renderingAttributesForLink link: Any,
                                   at location: any NSTextLocation,
-                                  defaultAttributes renderingAttributes: [NSAttributedString.Key : Any] = [:] ) -> [NSAttributedString.Key : Any]? {
+                                  defaultAttributes renderingAttributes: [NSAttributedString.Key: Any] = [:] ) -> [NSAttributedString.Key: Any]? {
         nil
     }
     public func textLayoutManager(_ textLayoutManager: NSTextLayoutManager,
