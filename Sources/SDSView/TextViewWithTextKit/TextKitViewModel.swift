@@ -63,6 +63,7 @@ open class TextKitViewModel: NSObject, TextViewModelProtocol {
         textLayoutManager.textViewportLayoutController.layoutViewport()
     }
 
+    @MainActor
     open func textViewFactory(_ text: String) -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
         #if os(macOS)
         // MARK: NSScrollView
@@ -119,6 +120,7 @@ open class TextKitViewModel: NSObject, TextViewModelProtocol {
         #endif
     }
     
+    @MainActor
     open func textViewUpdate(textView: NSUITextView, scrollView: NSUIScrollView, text: String) {
         OSLog.log.debug(#function)
         guard let textView = _textView else { return }
