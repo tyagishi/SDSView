@@ -19,7 +19,7 @@ import OSLog
 private var module = "com.smalldesksoftware.sdsview"
 
 extension OSLog {
-    // fileprivate static var log = Logger(subsystem: module, category: "TextKitViewModel")
+    //fileprivate static let log = Logger(subsystem: module, category: "TextKitViewModel")
     fileprivate static let log = Logger(.disabled)
 }
 
@@ -43,7 +43,7 @@ extension TextViewModelProtocol {
 @Observable
 open class TextKitViewModel: NSObject, TextViewModelProtocol {
     // swiftlint:disable identifier_name
-    @ObservationIgnored  public var _textView: NSUITextView? = nil
+    @ObservationIgnored @MainActor public var _textView: NSUITextView? = nil
     @ObservationIgnored public var _scrollView: NSUIScrollView? = nil
     public let _textChanged: PassthroughSubject<String, Never> = PassthroughSubject()
     // swiftlint:enable identifier_name
@@ -65,6 +65,7 @@ open class TextKitViewModel: NSObject, TextViewModelProtocol {
 
     @MainActor
     open func textViewFactory(_ text: String) -> (NSUITextView, NSUIScrollView, NSUITextViewDelegate?) {
+        OSLog.log.debug(#function)
         #if os(macOS)
         // MARK: NSScrollView
         let scrollView = NSUIScrollView()
